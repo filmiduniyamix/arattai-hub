@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Custom List with Thumbnails</title>
+    <style>
+        body { background: #122; color: #eee; font-family: sans-serif; }
+        .item-list { max-width: 600px; margin: auto; }
+        .item { display: flex; align-items: center; background: #eafbe9; margin: 16px 0; border-radius: 10px; box-shadow: 0 2px 6px #0002; }
+        .thumb { width: 95px; height: 95px; object-fit: cover; border-radius: 10px 0 0 10px; }
+        .info { padding: 12px; flex: 1; }
+        .item-title { font-size: 1.1em; color: #2074af; text-decoration: none; display: block; font-weight: bold; }
+        .item-desc { color: #455; }
+    </style>
+</head>
+<body>
+    <h2 style="text-align:center">Custom List with Thumbnails and Titles</h2>
+    <div class="item-list">
+        <div class="item">
+            <img src="https://example.com/path/to/thumb1.jpg" class="thumb" alt="Thumbnail 1"/>
+            <div class="info">
+                <a class="item-title" href="https://example.com/link1" target="_blank">TghubFile – Connect Now</a>
+                <div class="item-desc">Add your own description here.</div>
+            </div>
+        </div>
+        <div class="item">
+            <img src="https://example.com/path/to/thumb2.jpg" class="thumb" alt="Thumbnail 2"/>
+            <div class="info">
+                <a class="item-title" href="https://example.com/link2" target="_blank">TghubFile – Connect Now</a>
+                <div class="item-desc">Add your own description here.</div>
+            </div>
+        </div>
+        <div class="item">
+            <img src="https://example.com/path/to/thumb3.jpg" class="thumb" alt="Thumbnail 3"/>
+            <div class="info">
+                <a class="item-title" href="https://example.com/link3" target="_blank">After MMS Video Leak...</a>
+                <div class="item-desc">Add your own description here.</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
