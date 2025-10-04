@@ -2,40 +2,281 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Custom List with Thumbnails</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TghubFile - Connect Now</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { background: #122; color: #eee; font-family: sans-serif; }
-        .item-list { max-width: 600px; margin: auto; }
-        .item { display: flex; align-items: center; background: #eafbe9; margin: 16px 0; border-radius: 10px; box-shadow: 0 2px 6px #0002; }
-        .thumb { width: 95px; height: 95px; object-fit: cover; border-radius: 10px 0 0 10px; }
-        .info { padding: 12px; flex: 1; }
-        .item-title { font-size: 1.1em; color: #2074af; text-decoration: none; display: block; font-weight: bold; }
-        .item-desc { color: #455; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0c0c0c, #1a1a2e, #16213e);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.05) 0%, transparent 50%);
+            animation: backgroundShift 8s ease-in-out infinite alternate;
+        }
+
+        .warning {
+            background: linear-gradient(90deg, #ff6b6b, #ff8e53);
+            color: white;
+            padding: 12px;
+            font-size: 0.9em;
+            font-weight: 500;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            text-align: center;
+            z-index: 100;
+            animation: slideDown 0.8s ease-out;
+            box-shadow: 0 2px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .warning::before {
+            content: '📌';
+            margin-right: 8px;
+            animation: bounce 2s infinite;
+        }
+
+        .pulse-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 450px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 2;
+            animation: containerFloat 6s ease-in-out infinite;
+        }
+
+        .pulse-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e53, #7877c6, #48dbfb);
+            border-radius: 22px;
+            z-index: -1;
+            animation: borderGlow 3s ease-in-out infinite alternate;
+        }
+
+        .pulse-title {
+            font-size: 2.2em;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53, #48dbfb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+
+        .pulse-title::before {
+            content: '⚡';
+            margin-right: 12px;
+            animation: spin 3s linear infinite;
+        }
+
+        .card-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            color: #fff;
+            text-decoration: none;
+            padding: 18px 20px;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 500;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-3px) scale(1.02);
+            background: linear-gradient(135deg, rgba(120, 119, 198, 0.2), rgba(255, 107, 107, 0.2));
+            box-shadow: 
+                0 10px 25px rgba(120, 119, 198, 0.3),
+                0 5px 15px rgba(255, 107, 107, 0.2);
+            border-color: rgba(120, 119, 198, 0.3);
+        }
+
+        .card:active {
+            transform: translateY(-1px) scale(1.01);
+        }
+
+        /* Staggered animation delays */
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(5) { animation-delay: 0.5s; }
+        .card:nth-child(6) { animation-delay: 0.6s; }
+        .card:nth-child(7) { animation-delay: 0.7s; }
+        .card:nth-child(8) { animation-delay: 0.8s; }
+        .card:nth-child(9) { animation-delay: 0.9s; }
+        .card:nth-child(10) { animation-delay: 1.0s; }
+        .card:nth-child(11) { animation-delay: 1.1s; }
+        .card:nth-child(12) { animation-delay: 1.2s; }
+        .card:nth-child(13) { animation-delay: 1.3s; }
+        .card:nth-child(14) { animation-delay: 1.4s; }
+        .card:nth-child(15) { animation-delay: 1.5s; }
+        .card:nth-child(16) { animation-delay: 1.6s; }
+        .card:nth-child(17) { animation-delay: 1.7s; }
+
+        /* Animations */
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes containerFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(0.5deg); }
+        }
+
+        @keyframes borderGlow {
+            0% { opacity: 0.5; filter: hue-rotate(0deg); }
+            100% { opacity: 0.8; filter: hue-rotate(90deg); }
+        }
+
+        @keyframes titleGlow {
+            0% { filter: drop-shadow(0 0 5px rgba(255, 107, 107, 0.5)); }
+            100% { filter: drop-shadow(0 0 15px rgba(72, 219, 251, 0.5)); }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-3px); }
+            60% { transform: translateY(-2px); }
+        }
+
+        @keyframes backgroundShift {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 500px) {
+            .pulse-title { font-size: 1.8em; }
+            .card { font-size: 0.95em; padding: 16px 18px; }
+            .pulse-container { padding: 20px; max-width: 100%; }
+            .warning { font-size: 0.85em; padding: 10px; }
+        }
+
+        @media (max-width: 350px) {
+            .pulse-title { font-size: 1.6em; }
+            .card { font-size: 0.9em; padding: 14px 16px; }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #ff6b6b, #7877c6);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #ff8e53, #48dbfb);
+        }
     </style>
 </head>
 <body>
-    <h2 style="text-align:center">Custom List with Thumbnails and Titles</h2>
-    <div class="item-list">
-        <div class="item">
-            <img src="https://github.com/user-attachments/assets/2763c464-ea4a-4a28-8da8-2f7ff460fadc" class="thumb" alt="Thumbnail 1"/>
-            <div class="info">
-                <a class="item-title" href="https://example.com/link1" target="_blank">TghubFile – Connect Now</a>
-                <div class="item-desc">Add your own description here.</div>
-            </div>
-        </div>
-        <div class="item">
-            <img src="https://example.com/path/to/thumb2.jpg" class="thumb" alt="Thumbnail 2"/>
-            <div class="info">
-                <a class="item-title" href="https://example.com/link2" target="_blank">TghubFile – Connect Now</a>
-                <div class="item-desc">Add your own description here.</div>
-            </div>
-        </div>
-        <div class="item">
-            <img src="https://example.com/path/to/thumb3.jpg" class="thumb" alt="Thumbnail 3"/>
-            <div class="info">
-                <a class="item-title" href="https://example.com/link3" target="_blank">After MMS Video Leak...</a>
-                <div class="item-desc">Add your own description here.</div>
-            </div>
+    <div class="warning">Join the official channel to get all the latest updates!</div>
+
+    <div class="pulse-container">
+        <h1 class="pulse-title">TghubFile - Connect Now</h1>
+        <div class="card-stack">
+            <a href="https://t.me/+J_LehYanobxlYTk1" class="card">𝗧𝗲𝗹𝗲𝗴𝗿𝗮𝗺 𝗖𝗵𝗮𝗻𝗻𝗲𝗹𝘀 𝗟𝗶𝘀𝘁</a>
+            <a href="https://t.me/+KKLwhFgO88w1NzE9" class="card">Movies & Series</a>
+            <a href="https://t.me/+X8BAoFIUCYdjODI1" class="card">kdrama Cdrama - Drama Channel</a>
+            <a href="https://t.me/+UgJ0y5H57zw1MzBl" class="card">Animes</a>
+            <a href="https://t.me/+xT2J2I8EfO0wZTRl" class="card">OnlyFans</a>
+            <a href="https://t.me/+l6r9Dx4zM-NlNmM1" class="card">Viral Mss Videos</a>
+            <a href="https://t.me/+eYejirOFQsMzYTg1" class="card">Adultship AdultEmpire Erotica Film</a>
+            <a href="https://t.me/+hhzvAlfRQoJlNDg1" class="card">Hentai Anime</a>
+            <a href="https://t.me/+UofZmA8KSXEwNzRl" class="card">Korean Japanese Chinese</a>
+            <a href="https://t.me/+Nl3TU1Qx14o4NjFl" class="card">Mom And Son - StepSon</a>
+            <a href="https://t.me/+PUbGC3mJzwQzYjZl" class="card">Eightshots iEntertainment Mprime</a>
+            <a href="https://t.me/+cPO7te6Jv3xhZTE1" class="card">Brazzers</a>
+            <a href="https://t.me/+NdYLQ4sXFmJjN2Jl" class="card">Child Videos🔞</a>
+            <a href="https://t.me/+KctnnEt8wedjM2Rl" class="card">Blacked Blackedraw</a>
+            <a href="https://t.me/+zw4nJKkp3XJkYTll" class="card">𝗦𝗶𝘀𝘁𝗲𝗿 𝗔𝗻𝗱 𝗕𝗿𝗼𝘁𝗵𝗲𝗿 ᵇʳᵃᵗᵗʸˢⁱˢ ˢᵗᵉᵖˢⁱˢ ˢᵗᵉᵖᵈᵃᵈ</a>
+            <a href="https://t.me/+VfQqi3VM3x05ODA1" class="card">Adult Videos</a>
+            <a href="https://t.me/+ZLO2qaKcbEliNGI1" class="card">Ullu And Other OTT Hot Content</a>
         </div>
     </div>
 </body>
